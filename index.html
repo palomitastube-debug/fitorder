@@ -33,7 +33,7 @@
       font-size:16px;
     }
     button{
-      background:#111827;
+      background:#16a34a;
       color:white;
       border:none;
       cursor:pointer;
@@ -50,7 +50,10 @@
 </head>
 <body>
   <div class="card">
-    <h1>🍔 FitOrder</h1>
+<h1>FitOrder</h1>
+<p style="text-align:center;color:#666;">
+  Pide comida sin salirte de tus calorías
+</p>
 
     <label>¿Qué te apetece?</label>
     <select id="tipo">
@@ -89,7 +92,15 @@ function buscar(){
   if(resultados.length === 0){
     contenedor.innerHTML = '<p>No hay opciones dentro de tus calorías.</p>';
     return;
-  }
+    
+  if(resultados.length > 0){
+  contenedor.innerHTML += `
+    <div class="result" style="border:2px solid #16a34a;background:#f0fdf4;">
+      <strong>✅ Mejor opción para ti hoy</strong>
+      <p>${resultados[0].plato} — ${resultados[0].kcal} kcal</p>
+    </div>
+  `;
+}
 
   resultados.forEach(p => {
     contenedor.innerHTML += `
