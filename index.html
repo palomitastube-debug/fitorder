@@ -1,118 +1,460 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FitOrder</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FitOrder - Pide sin salirte de tu dieta</title>
+
   <style>
+    *{box-sizing:border-box}
+
     body{
-      font-family:Arial,sans-serif;
-      background:#111827;
-      color:white;
-      max-width:700px;
-      margin:40px auto;
-      padding:20px;
+      margin:0;
+      font-family:Inter, Arial, sans-serif;
+      background:#0b0f17;
+      color:#f3f4f6;
+      padding:24px;
+      display:flex;
+      justify-content:center;
     }
-    .card{
-      background:#1f2937;
-      padding:20px;
-      border-radius:16px;
-      margin-bottom:20px;
-    }
-    button{
+
+    .app{
       width:100%;
-      padding:14px;
+      max-width:980px;
+      background:#111827;
+      border:1px solid #243041;
+      border-radius:24px;
+      overflow:hidden;
+      box-shadow:0 20px 50px rgba(0,0,0,.45);
+    }
+
+    .topbar{
+      display:flex;
+      align-items:center;
+      padding:18px 22px;
+      background:#081225;
+      border-bottom:1px solid #1f2a3a;
+    }
+
+    .logo{
+      width:42px;height:42px;border-radius:12px;
+      background:#f59e0b;
+      display:flex;align-items:center;justify-content:center;
+      font-size:22px;
+    }
+
+    .brand{
+      font-size:28px;
+      font-weight:800;
+      margin-left:14px;
+    }
+
+    .mvp{
+      margin-left:auto;
+      background:#f97316;
+      color:white;
+      font-weight:700;
+      padding:6px 12px;
+      border-radius:999px;
+      font-size:12px;
+    }
+
+    .hero{
+      padding:34px 26px 10px;
+    }
+
+    h1{
+      margin:0 0 10px;
+      font-size:44px;
+      line-height:1.05;
+    }
+
+    .hero p{
+      margin:0;
+      color:#c7d2fe;
+      font-size:18px;
+    }
+
+    .filters{
+      margin:24px 26px 18px;
+      padding:22px;
+      border:1px solid #334155;
+      border-radius:22px;
+      background:#0f172a;
+      display:grid;
+      grid-template-columns:1.2fr .8fr;
+      gap:24px;
+    }
+
+    .label{
+      font-weight:800;
+      margin-bottom:12px;
+      font-size:18px;
+    }
+
+    .chips{
+      display:flex;
+      background:#050816;
+      border:1px solid #1f2937;
+      border-radius:999px;
+      overflow:hidden;
+    }
+
+    .chip{
+      flex:1;
+      text-align:center;
+      padding:14px 10px;
+      color:#cbd5e1;
+      font-weight:700;
+      cursor:pointer;
+      transition:.2s;
+    }
+
+    .chip.active{
+      background:#2a2f3a;
+      color:#fff;
+    }
+
+    .checkbox{
+      margin-top:16px;
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-weight:700;
+    }
+
+    .badges{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:16px;
+    }
+
+    .badge{
+      border:1px solid #475569;
+      color:#e5e7eb;
+      border-radius:999px;
+      padding:7px 12px;
+      font-size:13px;
+      font-weight:700;
+    }
+
+    .kcal-head{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      font-weight:800;
+      margin-bottom:14px;
+      font-size:18px;
+    }
+
+    input[type=range]{
+      width:100%;
+    }
+
+    .search{
+      display:flex;
+      justify-content:flex-end;
+      align-items:flex-end;
+      margin-top:18px;
+    }
+
+    button{
+      background:#f8fafc;
+      color:#111827;
       border:none;
       border-radius:999px;
-      background:#22c55e;
-      color:white;
-      font-weight:bold;
+      padding:16px 26px;
+      font-size:16px;
+      font-weight:800;
       cursor:pointer;
     }
-    .result{
+
+    .results-head{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      padding:6px 26px 0;
+    }
+
+    .results-head h2{
+      margin:0;
+      font-size:32px;
+    }
+
+    .results{
+      padding:18px 26px 28px;
+      display:grid;
+      gap:18px;
+    }
+
+    .card{
       background:#052e16;
-      border:1px solid #22c55e;
+      border:1px solid #86efac;
+      border-radius:22px;
+      padding:22px;
+    }
+
+    .card.secondary{
+      background:#0f172a;
+      border-color:#334155;
+    }
+
+    .tag{
+      display:inline-block;
+      background:#14532d;
+      color:#86efac;
+      border-radius:999px;
+      padding:7px 12px;
+      font-size:12px;
+      font-weight:800;
+      margin-bottom:14px;
+    }
+
+    .row{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:16px;
+      flex-wrap:wrap;
+    }
+
+    .title{
+      font-size:34px;
+      font-weight:900;
+      margin:0;
+    }
+
+    .restaurant{
+      margin-top:6px;
+      font-size:20px;
+      font-weight:800;
+      text-decoration:underline;
+    }
+
+    .kcal{
+      font-size:28px;
+      font-weight:900;
+    }
+
+    .macros{
+      display:flex;
+      gap:22px;
+      flex-wrap:wrap;
+      margin:18px 0;
+      font-size:17px;
+      font-weight:800;
+    }
+
+    .bottom{
+      display:flex;
+      align-items:center;
+      gap:14px;
+      flex-wrap:wrap;
+    }
+
+    .ok{
+      background:#14532d;
+      color:#86efac;
+      border-radius:999px;
+      padding:8px 14px;
+      font-weight:800;
+    }
+
+    .cta{
+      margin-left:auto;
+      border:1px solid #86efac;
+      color:#f8fafc;
+      padding:12px 18px;
+      border-radius:999px;
+      font-weight:800;
+      text-decoration:none;
+    }
+
+    .empty{
+      background:#331313;
+      border:1px solid #ef4444;
+      color:#fecaca;
       padding:18px;
       border-radius:16px;
-      margin-top:20px;
+      font-weight:800;
+      text-align:center;
+    }
+
+    @media (max-width:900px){
+      .filters{grid-template-columns:1fr}
+      h1{font-size:36px}
+      .title{font-size:28px}
+    }
+
+    @media (max-width:640px){
+      body{padding:12px}
+      .brand{font-size:24px}
+      h1{font-size:30px}
+      .results-head{flex-direction:column;align-items:flex-start;gap:6px}
+      .cta{margin-left:0;width:100%;text-align:center}
     }
   </style>
 </head>
 <body>
 
-  <h1>🍔 FitOrder</h1>
-  <p>Encuentra comida que encaje en tus calorías.</p>
+<div class="app">
 
-  <div class="card">
-    <label>Tipo de comida</label><br><br>
-    <select id="tipo">
-      <option value="hamburguesa">Hamburguesa</option>
-      <option value="burrito">Burrito</option>
-      <option value="pizza">Pizza</option>
-    </select>
+  <div class="topbar">
+    <div class="logo">🍴</div>
+    <div class="brand">FitOrder</div>
+    <div class="mvp">MVP</div>
   </div>
 
-  <div class="card">
-    <label>Calorías disponibles: <span id="kcalTexto">800</span> kcal</label><br><br>
-    <input type="range" id="kcal" min="300" max="1500" step="50" value="800" style="width:100%;">
+  <div class="hero">
+    <h1>Pide comida sin salirte de tu dieta</h1>
+    <p>Encuentra opciones reales de restaurantes según las calorías que te quedan y tus objetivos de proteína.</p>
   </div>
 
-  <button onclick="buscar()">🔎 Buscar comida</button>
+  <div class="filters">
 
-  <div id="salida"></div>
+    <div>
+      <div class="label">¿Qué te apetece?</div>
 
-  <script>
-    const platos = [
-      {tipo:'hamburguesa', nombre:'Whopper', restaurante:'Burger King', kcal:643, prote:30.4},
-      {tipo:'hamburguesa', nombre:'Steakhouse', restaurante:'Burger King', kcal:707, prote:36.2},
-      {tipo:'hamburguesa', nombre:'Long Chicken', restaurante:'Burger King', kcal:585, prote:22},
+      <div class="chips">
+        <div class="chip active" data-type="hamburguesa">🍔 Hamburguesa</div>
+        <div class="chip" data-type="burrito">🌯 Burrito</div>
+      </div>
 
-      {tipo:'burrito', nombre:'Burrito Supreme Pollo', restaurante:'Taco Bell', kcal:349, prote:29.6},
-      {tipo:'burrito', nombre:'Crunchywrap Pollo', restaurante:'Taco Bell', kcal:505, prote:49.8},
+      <label class="checkbox">
+        <input type="checkbox" id="priorizar" checked />
+        Priorizar proteína
+      </label>
 
-      {tipo:'pizza', nombre:'Pollo a la Parrilla', restaurante:'Domino\\'s', kcal:181, prote:10},
-      {tipo:'pizza', nombre:'Margarita', restaurante:'Domino\\'s', kcal:212, prote:9.4}
-    ];
+      <div class="badges">
+        <div class="badge">Datos oficiales</div>
+        <div class="badge">Burger King</div>
+        <div class="badge">Taco Bell</div>
+      </div>
+    </div>
 
-    const slider = document.getElementById('kcal');
-    const texto = document.getElementById('kcalTexto');
+    <div>
+      <div class="kcal-head">
+        <span>¿Cuántas kcal te quedan?</span>
+        <span id="kcalValue">800 kcal</span>
+      </div>
 
-    slider.oninput = function(){
-      texto.textContent = this.value;
-    };
+      <input type="range" id="kcalSlider" min="300" max="1500" step="50" value="800" />
 
-    function buscar(){
-      const tipo = document.getElementById('tipo').value;
-      const limite = parseInt(slider.value);
+      <div class="search">
+        <button onclick="buscar()">🔎 Buscar comida</button>
+      </div>
+    </div>
 
-      const resultados = platos
-        .filter(p => p.tipo === tipo && p.kcal <= limite)
-        .sort((a,b) => b.prote - a.prote);
+  </div>
 
-      const salida = document.getElementById('salida');
-      salida.innerHTML = '';
+  <div class="results-head">
+    <h2>Resultados</h2>
+    <div id="objetivoTxt">Objetivo: ≤ 800 kcal</div>
+  </div>
 
-      if(resultados.length === 0){
-        salida.innerHTML = '<div class="result">No hay opciones dentro de tus calorías.</div>';
-        return;
-      }
+  <div id="resultados" class="results"></div>
 
-      resultados.forEach((p,i) => {
-        salida.innerHTML += `
-          <div class="result">
-            ${i===0 ? '<strong>✅ Mejor opción</strong><br><br>' : ''}
-            <h2>${p.nombre}</h2>
-            <p><strong>${p.restaurante}</strong></p>
-            <p>🔥 ${p.kcal} kcal</p>
-            <p>💪 ${p.prote} g proteína</p>
-            <p>📉 Te sobran ${limite - p.kcal} kcal</p>
-          </div>
-        `;
-      });
+</div>
+
+<script>
+  const platos = [
+    { restaurante:'Burger King', plato:'Whopper', kcal:643, proteina:30.4, carbs:48.9, grasa:36, tipo:'hamburguesa' },
+    { restaurante:'Burger King', plato:'Steakhouse', kcal:707, proteina:36.2, carbs:54.2, grasa:38.4, tipo:'hamburguesa' },
+    { restaurante:'Burger King', plato:'Long Chicken', kcal:585, proteina:22.0, carbs:46.0, grasa:35.0, tipo:'hamburguesa' },
+
+    { restaurante:'Taco Bell', plato:'Burrito Supreme Pollo Picante', kcal:349, proteina:29.6, carbs:35.7, grasa:9.6, tipo:'burrito' },
+    { restaurante:'Taco Bell', plato:'Crunchywrap Supreme Pollo Asado', kcal:505, proteina:49.8, carbs:33.9, grasa:16.1, tipo:'burrito' }
+  ];
+
+  let tipoActual = 'hamburguesa';
+
+  document.querySelectorAll('.chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+      tipoActual = chip.dataset.type;
+      buscar();
+    });
+  });
+
+  const slider = document.getElementById('kcalSlider');
+  const kcalValue = document.getElementById('kcalValue');
+  const objetivoTxt = document.getElementById('objetivoTxt');
+
+  slider.addEventListener('input', () => {
+    kcalValue.textContent = slider.value + ' kcal';
+    objetivoTxt.textContent = 'Objetivo: ≤ ' + slider.value + ' kcal';
+  });
+
+  function buscar(){
+    const kcal = parseInt(slider.value);
+    const priorizar = document.getElementById('priorizar').checked;
+
+    let resultados = platos.filter(p => p.tipo === tipoActual && p.kcal <= kcal);
+
+    resultados.sort((a,b) => priorizar ? b.proteina - a.proteina : a.kcal - b.kcal);
+
+    const cont = document.getElementById('resultados');
+    cont.innerHTML = '';
+
+    if(resultados.length === 0){
+      cont.innerHTML = '<div class="empty">No hay opciones dentro de tus calorías.</div>';
+      return;
     }
 
-    buscar();
-  </script>
+    const mejor = resultados[0];
+
+    cont.innerHTML += `
+      <div class="card">
+        <div class="tag">MEJOR OPCIÓN</div>
+
+        <div class="row">
+          <div>
+            <div class="title">${mejor.plato}</div>
+            <div class="restaurant">${mejor.restaurante}</div>
+          </div>
+
+          <div class="kcal">${mejor.kcal} kcal</div>
+        </div>
+
+        <div class="macros">
+          <div>🔥 ${mejor.kcal} kcal</div>
+          <div>💪 ${mejor.proteina} g proteína</div>
+          <div>📉 ${mejor.carbs} g carbohidratos</div>
+          <div>🥑 ${mejor.grasa} g grasa</div>
+        </div>
+
+        <div class="bottom">
+          <div class="ok">Cabe dentro del objetivo</div>
+          <a class="cta" href="https://www.burgerking.es" target="_blank">Ver en ${mejor.restaurante} ↗</a>
+        </div>
+      </div>
+    `;
+
+    resultados.slice(1).forEach(p => {
+      cont.innerHTML += `
+        <div class="card secondary">
+          <div class="row">
+            <div>
+              <div class="title" style="font-size:26px">${p.plato}</div>
+              <div class="restaurant" style="font-size:18px">${p.restaurante}</div>
+            </div>
+            <div class="kcal" style="font-size:24px">${p.kcal} kcal</div>
+          </div>
+
+          <div class="macros">
+            <div>💪 ${p.proteina} g proteína</div>
+            <div>📉 ${p.carbs} g carbohidratos</div>
+            <div>🥑 ${p.grasa} g grasa</div>
+          </div>
+        </div>
+      `;
+    });
+  }
+
+  buscar();
+</script>
 
 </body>
 </html>
