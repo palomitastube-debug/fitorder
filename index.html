@@ -1,265 +1,395 @@
 <!DOCTYPE html>
-
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>FitOrder - Pide sin salirte de tus calorías</title>
+  <title>FitOrder - Pide sin salirte de tu dieta</title>
 
   <style>
-    *{
-      box-sizing:border-box;
-    }
+    *{box-sizing:border-box}
 
     body{
       margin:0;
-      font-family:Arial, Helvetica, sans-serif;
-      background:#f3f4f6;
-      color:#111827;
+      font-family:Inter, Arial, sans-serif;
+      background:#0b0f17;
+      color:#f3f4f6;
+      padding:32px;
       display:flex;
       justify-content:center;
-      padding:24px;
     }
 
-    .container{
+    .app{
       width:100%;
-      max-width:680px;
-      background:white;
-      border-radius:22px;
-      padding:28px;
-      box-shadow:0 10px 30px rgba(0,0,0,.08);
+      max-width:980px;
+      background:#111827;
+      border:1px solid #243041;
+      border-radius:24px;
+      overflow:hidden;
+      box-shadow:0 20px 50px rgba(0,0,0,.45);
     }
 
-    h1{
-      margin:0;
-      text-align:center;
-      font-size:2.2rem;
+    .topbar{
+      display:flex;
+      align-items:center;
+      padding:18px 22px;
+      background:#081225;
+      border-bottom:1px solid #1f2a3a;
     }
 
-    .subtitle{
-      text-align:center;
-      color:#6b7280;
-      margin-top:8px;
-      margin-bottom:28px;
-      line-height:1.4;
+    .logo{
+      width:42px;height:42px;border-radius:12px;
+      background:#f59e0b;
+      display:flex;align-items:center;justify-content:center;
+      font-size:22px;
     }
 
-    label{
-      display:block;
-      font-weight:700;
-      margin-top:18px;
-      margin-bottom:8px;
+    .brand{
+      font-size:28px;
+      font-weight:800;
+      margin-left:14px;
     }
 
-    select,input,button{
-      width:100%;
-      padding:14px;
-      border-radius:12px;
-      border:1px solid #d1d5db;
-      font-size:16px;
-    }
-
-    button{
-      margin-top:22px;
-      background:#16a34a;
+    .mvp{
+      margin-left:auto;
+      background:#f97316;
       color:white;
-      border:none;
       font-weight:700;
-      cursor:pointer;
-      transition:0.2s ease;
-    }
-
-    button:hover{
-      background:#15803d;
-      transform:translateY(-1px);
+      padding:6px 12px;
+      border-radius:999px;
+      font-size:12px;
     }
 
     .hero{
-      background:#f0fdf4;
-      border:2px solid #16a34a;
-      border-radius:16px;
-      padding:18px;
-      margin-top:26px;
+      padding:34px 26px 10px;
     }
 
-    .hero small{
-      color:#166534;
-      font-weight:700;
-      letter-spacing:.3px;
+    h1{
+      margin:0 0 10px;
+      font-size:52px;
+      line-height:1.05;
     }
 
-    .hero h2{
-      margin:8px 0 6px;
-      font-size:1.35rem;
+    .hero p{
+      margin:0;
+      color:#c7d2fe;
+      font-size:18px;
     }
 
-    .hero .meta{
-      display:flex;
-      gap:14px;
-      flex-wrap:wrap;
-      font-weight:700;
-    }
-
-    .results{
-      margin-top:18px;
+    .filters{
+      margin:24px 26px 18px;
+      padding:22px;
+      border:1px solid #334155;
+      border-radius:22px;
+      background:#0f172a;
       display:grid;
-      gap:14px;
+      grid-template-columns:1.2fr .8fr;
+      gap:24px;
+    }
+
+    .label{
+      font-weight:800;
+      margin-bottom:12px;
+      font-size:18px;
+    }
+
+    .chips{
+      display:flex;
+      background:#050816;
+      border:1px solid #1f2937;
+      border-radius:999px;
+      overflow:hidden;
+    }
+
+    .chip{
+      flex:1;
+      text-align:center;
+      padding:14px 10px;
+      color:#cbd5e1;
+      font-weight:700;
+      cursor:pointer;
+    }
+
+    .chip.active{
+      background:#2a2f3a;
+      color:#fff;
+    }
+
+    .checkbox{
+      margin-top:16px;
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-weight:700;
+    }
+
+    .badges{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:16px;
+    }
+
+    .badge{
+      border:1px solid #475569;
+      color:#e5e7eb;
+      border-radius:999px;
+      padding:7px 12px;
+      font-size:13px;
+      font-weight:700;
+    }
+
+    .kcal-head{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      font-weight:800;
+      margin-bottom:14px;
+      font-size:18px;
+    }
+
+    input[type=range]{
+      width:100%;
+    }
+
+    .search{
+      display:flex;
+      justify-content:flex-end;
+      align-items:flex-end;
+    }
+
+    button{
+      background:#f8fafc;
+      color:#111827;
+      border:none;
+      border-radius:999px;
+      padding:16px 26px;
+      font-size:16px;
+      font-weight:800;
+      cursor:pointer;
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+
+    .results-head{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      padding:6px 26px 0;
+    }
+
+    .results-head h2{
+      margin:0;
+      font-size:34px;
+    }
+
+    .results-head .target{
+      color:#e5e7eb;
+      font-weight:800;
+      font-size:18px;
     }
 
     .card{
-      border:1px solid #e5e7eb;
-      border-radius:16px;
-      padding:16px;
-      background:#fff;
+      margin:18px 26px 28px;
+      background:#052e16;
+      border:1px solid #86efac;
+      border-radius:22px;
+      padding:22px;
     }
 
-    .card h3{
-      margin:0 0 6px;
-      font-size:1.1rem;
+    .card-top{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      margin-bottom:14px;
+    }
+
+    .tag{
+      background:#14532d;
+      color:#86efac;
+      border-radius:999px;
+      padding:7px 12px;
+      font-size:12px;
+      font-weight:800;
+    }
+
+    .card-top .kcal{
+      font-size:28px;
+      font-weight:900;
+    }
+
+    .main{
+      display:flex;
+      gap:18px;
+      align-items:center;
+    }
+
+    .icon{
+      width:64px;height:64px;border-radius:18px;
+      background:#f59e0b;
+      display:flex;align-items:center;justify-content:center;
+      font-size:30px;
+    }
+
+    .title{
+      font-size:38px;
+      font-weight:900;
+      margin:0;
     }
 
     .restaurant{
-      color:#374151;
-      font-weight:700;
-      margin-bottom:10px;
+      margin-top:6px;
+      font-size:22px;
+      font-weight:800;
+      text-decoration:underline;
     }
 
-    .stats{
+    .macros{
       display:flex;
+      gap:28px;
+      flex-wrap:wrap;
+      margin:22px 0;
+      font-size:18px;
+      font-weight:800;
+    }
+
+    .bottom{
+      display:flex;
+      align-items:center;
       gap:14px;
       flex-wrap:wrap;
-      font-size:15px;
-      font-weight:700;
     }
 
-    .empty{
-      margin-top:18px;
-      padding:16px;
-      border-radius:12px;
-      background:#fef2f2;
-      border:1px solid #fecaca;
-      color:#991b1b;
-      font-weight:700;
-      text-align:center;
+    .ok{
+      background:#14532d;
+      color:#86efac;
+      border-radius:999px;
+      padding:8px 14px;
+      font-weight:800;
     }
 
-    .footer{
-      margin-top:26px;
-      text-align:center;
-      color:#6b7280;
-      font-size:14px;
+    .cta{
+      margin-left:auto;
+      border:1px solid #86efac;
+      color:#f8fafc;
+      padding:12px 18px;
+      border-radius:999px;
+      font-weight:800;
+      text-decoration:none;
+    }
+
+    @media (max-width:900px){
+      h1{font-size:40px}
+      .filters{grid-template-columns:1fr}
+      .title{font-size:30px}
+      .restaurant{font-size:18px}
     }
 
     @media (max-width:640px){
-      .container{
-        padding:22px;
-      }
-
-      h1{
-        font-size:1.9rem;
-      }
+      body{padding:16px}
+      .brand{font-size:24px}
+      h1{font-size:34px}
+      .results-head{align-items:flex-start;gap:8px;flex-direction:column}
+      .main{align-items:flex-start}
+      .cta{margin-left:0;width:100%;text-align:center}
     }
   </style>
-
 </head>
 <body>
 
-  <div class="container">
+  <div class="app">
 
-```
-<h1>🍔 FitOrder</h1>
-<p class="subtitle">
-  Encuentra qué pedir en restaurantes sin salirte de tu dieta.
-  Elige el tipo de comida y las calorías que te quedan hoy.
-</p>
+    <div class="topbar">
+      <div class="logo">🍴</div>
+      <div class="brand">FitOrder</div>
+      <div class="mvp">MVP</div>
+    </div>
 
-<label for="tipo">¿Qué te apetece hoy?</label>
-<select id="tipo">
-  <option value="hamburguesa">🍔 Hamburguesa</option>
-  <option value="burrito">🌯 Burrito</option>
-</select>
+    <div class="hero">
+      <h1>Pide comida sin salirte de tu dieta</h1>
+      <p>
+        Encuentra opciones reales de restaurantes según las calorías que te quedan
+        y tus objetivos de proteína.
+      </p>
+    </div>
 
-<label for="kcal">¿Cuántas kcal te quedan hoy?</label>
-<input type="number" id="kcal" value="800" min="200" step="50" />
+    <div class="filters">
 
-<button onclick="buscar()">Encontrar mi mejor opción</button>
+      <div>
+        <div class="label">¿Qué te apetece?</div>
 
-<div id="salida"></div>
-
-<div class="footer">
-  MVP v0.1 · Datos oficiales de Burger King y Taco Bell
-</div>
-```
-
-  </div>
-
-  <script>
-    const platos = [
-      { restaurante: 'Burger King', plato: 'Whopper', kcal: 643, proteina: 30.4, tipo: 'hamburguesa' },
-      { restaurante: 'Burger King', plato: 'Steakhouse', kcal: 707, proteina: 36.2, tipo: 'hamburguesa' },
-      { restaurante: 'Burger King', plato: 'Long Chicken', kcal: 585, proteina: 22.0, tipo: 'hamburguesa' },
-
-      { restaurante: 'Taco Bell', plato: 'Burrito Supreme Pollo Picante', kcal: 349, proteina: 29.6, tipo: 'burrito' },
-      { restaurante: 'Taco Bell', plato: 'Crunchywrap Supreme Pollo Asado', kcal: 505, proteina: 49.8, tipo: 'burrito' }
-    ];
-
-    function buscar(){
-
-      const tipo = document.getElementById('tipo').value;
-      const kcal = parseInt(document.getElementById('kcal').value);
-
-      const resultados = platos
-        .filter(p => p.tipo === tipo && p.kcal <= kcal)
-        .sort((a,b) => b.proteina - a.proteina);
-
-      const salida = document.getElementById('salida');
-
-      if(resultados.length === 0){
-        salida.innerHTML = `
-          <div class="empty">
-            No hay opciones dentro de ${kcal} kcal.
-          </div>
-        `;
-        return;
-      }
-
-      const mejor = resultados[0];
-
-      let html = `
-        <div class="hero">
-          <small>✅ MEJOR OPCIÓN PARA TI HOY</small>
-          <h2>${mejor.plato}</h2>
-          <div class="restaurant">${mejor.restaurante}</div>
-          <div class="meta">
-            <span>🔥 ${mejor.kcal} kcal</span>
-            <span>💪 ${mejor.proteina} g proteína</span>
-            <span>📉 Te sobran ${kcal - mejor.kcal} kcal</span>
-          </div>
+        <div class="chips">
+          <div class="chip active">🍔 Hamburguesa</div>
+          <div class="chip">🌯 Burrito</div>
+          <div class="chip">🍕 Pizza</div>
         </div>
 
-        <div class="results">
-      `;
+        <label class="checkbox">
+          <input type="checkbox" checked />
+          Priorizar proteína
+        </label>
 
-      resultados.forEach(p => {
-        html += `
-          <div class="card">
-            <h3>${p.plato}</h3>
-            <div class="restaurant">${p.restaurante}</div>
-            <div class="stats">
-              <span>🔥 ${p.kcal} kcal</span>
-              <span>💪 ${p.proteina} g proteína</span>
-            </div>
-          </div>
-        `;
-      });
+        <div class="badges">
+          <div class="badge">Datos oficiales</div>
+          <div class="badge">Burger King</div>
+          <div class="badge">Taco Bell</div>
+        </div>
+      </div>
 
-      html += '</div>';
+      <div>
+        <div class="kcal-head">
+          <span>¿Cuántas kcal te quedan?</span>
+          <span>800 kcal</span>
+        </div>
 
-      salida.innerHTML = html;
-    }
+        <input type="range" min="300" max="1500" value="800" />
 
-    buscar();
-  </script>
+        <div class="search">
+          <button>🔎 Buscar comida</button>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="results-head">
+      <h2>Resultados</h2>
+      <div class="target">Objetivo: ≤ 800 kcal</div>
+    </div>
+
+    <div class="card">
+
+      <div class="card-top">
+        <div class="tag">MEJOR OPCIÓN</div>
+        <div class="kcal">643 kcal</div>
+      </div>
+
+      <div class="main">
+        <div class="icon">🍔</div>
+
+        <div>
+          <div class="title">Whopper</div>
+          <div class="restaurant">Burger King</div>
+        </div>
+      </div>
+
+      <div class="macros">
+        <div>🔥 643 kcal</div>
+        <div>💪 30.4 g proteína</div>
+        <div>📉 48.9 g carbohidratos</div>
+        <div>🥑 36 g grasa</div>
+      </div>
+
+      <div class="bottom">
+        <div class="ok">Cabe dentro del objetivo</div>
+
+        <a class="cta" href="https://www.burgerking.es" target="_blank">
+          Ver en Burger King ↗
+        </a>
+      </div>
+
+    </div>
+
+  </div>
 
 </body>
 </html>
