@@ -1,234 +1,118 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>FitOrder - MVP</title>
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FitOrder</title>
   <style>
     body{
-      margin:0;
-      font-family:Arial, sans-serif;
-      background:#0b1220;
-      color:white;
-      display:flex;
-      justify-content:center;
-      padding:24px;
-    }
-
-    .app{
-      width:100%;
-      max-width:800px;
+      font-family:Arial,sans-serif;
       background:#111827;
-      border-radius:20px;
-      padding:24px;
-      box-shadow:0 10px 30px rgba(0,0,0,.4);
+      color:white;
+      max-width:700px;
+      margin:40px auto;
+      padding:20px;
     }
-
-    h1{
-      margin:0;
-      font-size:40px;
-    }
-
-    .sub{
-      color:#cbd5e1;
-      margin:8px 0 24px;
-    }
-
-    .row{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:18px;
-    }
-
-    .box{
-      background:#0f172a;
-      border:1px solid #334155;
+    .card{
+      background:#1f2937;
+      padding:20px;
       border-radius:16px;
-      padding:18px;
+      margin-bottom:20px;
     }
-
-    label{
-      display:block;
-      font-weight:700;
-      margin-bottom:10px;
-    }
-
-    select,input[type=range]{
-      width:100%;
-    }
-
-    .kcal{
-      margin-top:10px;
-      font-weight:700;
-      color:#86efac;
-    }
-
     button{
-      margin-top:16px;
       width:100%;
       padding:14px;
       border:none;
       border-radius:999px;
-      background:#f8fafc;
-      color:#111827;
-      font-weight:800;
+      background:#22c55e;
+      color:white;
+      font-weight:bold;
       cursor:pointer;
     }
-
     .result{
-      margin-top:22px;
       background:#052e16;
-      border:1px solid #86efac;
-      border-radius:18px;
+      border:1px solid #22c55e;
       padding:18px;
-    }
-
-    .result h2{
-      margin:0 0 6px;
-      font-size:32px;
-    }
-
-    .restaurant{
-      text-decoration:underline;
-      font-weight:700;
-      margin-bottom:14px;
-    }
-
-    .macros{
-      display:flex;
-      gap:16px;
-      flex-wrap:wrap;
-      font-weight:700;
-    }
-
-    .secondary{
-      margin-top:14px;
-      background:#0f172a;
-      border:1px solid #334155;
-      border-radius:14px;
-      padding:14px;
-    }
-
-    @media (max-width:700px){
-      .row{
-        grid-template-columns:1fr;
-      }
-
-      h1{
-        font-size:32px;
-      }
+      border-radius:16px;
+      margin-top:20px;
     }
   </style>
 </head>
 <body>
 
-<div class="app">
-
   <h1>🍔 FitOrder</h1>
-  <div class="sub">Pide comida sin salirte de tus calorías.</div>
+  <p>Encuentra comida que encaje en tus calorías.</p>
 
-  <div class="row">
-
-    <div class="box">
-      <label>¿Qué te apetece?</label>
-
-      <select id="tipo">
-        <option value="hamburguesa">🍔 Hamburguesa</option>
-        <option value="burrito">🌯 Burrito</option>
-        <option value="pizza">🍕 Pizza</option>
-      </select>
-    </div>
-
-    <div class="box">
-      <label>¿Cuántas kcal te quedan?</label>
-
-      <input type="range" id="kcalSlider" min="300" max="1500" step="50" value="800" />
-
-      <div class="kcal" id="kcalValue">800 kcal</div>
-    </div>
-
+  <div class="card">
+    <label>Tipo de comida</label><br><br>
+    <select id="tipo">
+      <option value="hamburguesa">Hamburguesa</option>
+      <option value="burrito">Burrito</option>
+      <option value="pizza">Pizza</option>
+    </select>
   </div>
 
-  <button onclick="buscar()">🔎 Encontrar mi mejor opción</button>
+  <div class="card">
+    <label>Calorías disponibles: <span id="kcalTexto">800</span> kcal</label><br><br>
+    <input type="range" id="kcal" min="300" max="1500" step="50" value="800" style="width:100%;">
+  </div>
 
-  <div id="resultados"></div>
+  <button onclick="buscar()">🔎 Buscar comida</button>
 
-</div>
+  <div id="salida"></div>
 
-<script>
+  <script>
+    const platos = [
+      {tipo:'hamburguesa', nombre:'Whopper', restaurante:'Burger King', kcal:643, prote:30.4},
+      {tipo:'hamburguesa', nombre:'Steakhouse', restaurante:'Burger King', kcal:707, prote:36.2},
+      {tipo:'hamburguesa', nombre:'Long Chicken', restaurante:'Burger King', kcal:585, prote:22},
 
-const platos = [
-  { restaurante:'Burger King', plato:'Whopper', kcal:643, proteina:30.4, tipo:'hamburguesa' },
-  { restaurante:'Burger King', plato:'Steakhouse', kcal:707, proteina:36.2, tipo:'hamburguesa' },
-  { restaurante:'Burger King', plato:'Long Chicken', kcal:585, proteina:22.0, tipo:'hamburguesa' },
+      {tipo:'burrito', nombre:'Burrito Supreme Pollo', restaurante:'Taco Bell', kcal:349, prote:29.6},
+      {tipo:'burrito', nombre:'Crunchywrap Pollo', restaurante:'Taco Bell', kcal:505, prote:49.8},
 
-  { restaurante:'Taco Bell', plato:'Burrito Supreme Pollo Picante', kcal:349, proteina:29.6, tipo:'burrito' },
-  { restaurante:'Taco Bell', plato:'Crunchywrap Supreme Pollo Asado', kcal:505, proteina:49.8, tipo:'burrito' },
+      {tipo:'pizza', nombre:'Pollo a la Parrilla', restaurante:'Domino\\'s', kcal:181, prote:10},
+      {tipo:'pizza', nombre:'Margarita', restaurante:'Domino\\'s', kcal:212, prote:9.4}
+    ];
 
-  { restaurante:'Domino\\'s', plato:'Pollo a la Parrilla', kcal:181, proteina:10.0, tipo:'pizza' },
-  { restaurante:'Domino\\'s', plato:'Margarita', kcal:212, proteina:9.4, tipo:'pizza' }
-];
+    const slider = document.getElementById('kcal');
+    const texto = document.getElementById('kcalTexto');
 
-const slider = document.getElementById('kcalSlider');
-const kcalValue = document.getElementById('kcalValue');
+    slider.oninput = function(){
+      texto.textContent = this.value;
+    };
 
-slider.addEventListener('input', function(){
-  kcalValue.textContent = slider.value + ' kcal';
-});
+    function buscar(){
+      const tipo = document.getElementById('tipo').value;
+      const limite = parseInt(slider.value);
 
-function buscar(){
+      const resultados = platos
+        .filter(p => p.tipo === tipo && p.kcal <= limite)
+        .sort((a,b) => b.prote - a.prote);
 
-  const tipo = document.getElementById('tipo').value;
-  const kcal = parseInt(slider.value);
+      const salida = document.getElementById('salida');
+      salida.innerHTML = '';
 
-  const resultados = platos
-    .filter(p => p.tipo === tipo && p.kcal <= kcal)
-    .sort((a,b) => b.proteina - a.proteina);
+      if(resultados.length === 0){
+        salida.innerHTML = '<div class="result">No hay opciones dentro de tus calorías.</div>';
+        return;
+      }
 
-  const cont = document.getElementById('resultados');
-  cont.innerHTML = '';
+      resultados.forEach((p,i) => {
+        salida.innerHTML += `
+          <div class="result">
+            ${i===0 ? '<strong>✅ Mejor opción</strong><br><br>' : ''}
+            <h2>${p.nombre}</h2>
+            <p><strong>${p.restaurante}</strong></p>
+            <p>🔥 ${p.kcal} kcal</p>
+            <p>💪 ${p.prote} g proteína</p>
+            <p>📉 Te sobran ${limite - p.kcal} kcal</p>
+          </div>
+        `;
+      });
+    }
 
-  if(resultados.length === 0){
-    cont.innerHTML = '<div class="result">No hay opciones dentro de tus calorías.</div>';
-    return;
-  }
-
-  const mejor = resultados[0];
-
-  cont.innerHTML += `
-    <div class="result">
-      <div style="font-size:12px;font-weight:800;color:#86efac;margin-bottom:8px;">
-        ✅ MEJOR OPCIÓN
-      </div>
-
-      <h2>${mejor.plato}</h2>
-
-      <div class="restaurant">${mejor.restaurante}</div>
-
-      <div class="macros">
-        <div>🔥 ${mejor.kcal} kcal</div>
-        <div>💪 ${mejor.proteina} g proteína</div>
-        <div>📉 Te sobran ${kcal - mejor.kcal} kcal</div>
-      </div>
-    </div>
-  `;
-
-  resultados.slice(1).forEach(p => {
-    cont.innerHTML += `
-      <div class="secondary">
-        <strong>${p.plato}</strong> — ${p.restaurante}
-        <div style="margin-top:6px">
-          🔥 ${p.kcal} kcal · 💪 ${p.proteina} g proteína
-        </div>
-      </div>
-    `;
-  });
-}
-
-buscar();
-
-</script>
+    buscar();
+  </script>
 
 </body>
 </html>
