@@ -13,7 +13,7 @@
       font-family:Inter, Arial, sans-serif;
       background:#0b0f17;
       color:#f3f4f6;
-      padding:32px;
+      padding:24px;
       display:flex;
       justify-content:center;
     }
@@ -65,7 +65,7 @@
 
     h1{
       margin:0 0 10px;
-      font-size:52px;
+      font-size:44px;
       line-height:1.05;
     }
 
@@ -107,6 +107,7 @@
       color:#cbd5e1;
       font-weight:700;
       cursor:pointer;
+      transition:.2s;
     }
 
     .chip.active{
@@ -155,6 +156,7 @@
       display:flex;
       justify-content:flex-end;
       align-items:flex-end;
+      margin-top:18px;
     }
 
     button{
@@ -166,9 +168,6 @@
       font-size:16px;
       font-weight:800;
       cursor:pointer;
-      display:flex;
-      align-items:center;
-      gap:10px;
     }
 
     .results-head{
@@ -180,76 +179,70 @@
 
     .results-head h2{
       margin:0;
-      font-size:34px;
+      font-size:32px;
     }
 
-    .results-head .target{
-      color:#e5e7eb;
-      font-weight:800;
-      font-size:18px;
+    .results{
+      padding:18px 26px 28px;
+      display:grid;
+      gap:18px;
     }
 
     .card{
-      margin:18px 26px 28px;
       background:#052e16;
       border:1px solid #86efac;
       border-radius:22px;
       padding:22px;
     }
 
-    .card-top{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      margin-bottom:14px;
+    .card.secondary{
+      background:#0f172a;
+      border-color:#334155;
     }
 
     .tag{
+      display:inline-block;
       background:#14532d;
       color:#86efac;
       border-radius:999px;
       padding:7px 12px;
       font-size:12px;
       font-weight:800;
+      margin-bottom:14px;
     }
 
-    .card-top .kcal{
-      font-size:28px;
-      font-weight:900;
-    }
-
-    .main{
+    .row{
       display:flex;
-      gap:18px;
+      justify-content:space-between;
       align-items:center;
-    }
-
-    .icon{
-      width:64px;height:64px;border-radius:18px;
-      background:#f59e0b;
-      display:flex;align-items:center;justify-content:center;
-      font-size:30px;
+      gap:16px;
+      flex-wrap:wrap;
     }
 
     .title{
-      font-size:38px;
+      font-size:34px;
       font-weight:900;
       margin:0;
     }
 
     .restaurant{
       margin-top:6px;
-      font-size:22px;
+      font-size:20px;
       font-weight:800;
       text-decoration:underline;
     }
 
+    .kcal{
+      font-size:28px;
+      font-weight:900;
+    }
+
     .macros{
       display:flex;
-      gap:28px;
+      gap:22px;
       flex-wrap:wrap;
-      margin:22px 0;
-      font-size:18px;
+      margin:18px 0;
+      font-size:17px;
       font-weight:800;
     }
 
@@ -278,118 +271,190 @@
       text-decoration:none;
     }
 
+    .empty{
+      background:#331313;
+      border:1px solid #ef4444;
+      color:#fecaca;
+      padding:18px;
+      border-radius:16px;
+      font-weight:800;
+      text-align:center;
+    }
+
     @media (max-width:900px){
-      h1{font-size:40px}
       .filters{grid-template-columns:1fr}
-      .title{font-size:30px}
-      .restaurant{font-size:18px}
+      h1{font-size:36px}
+      .title{font-size:28px}
     }
 
     @media (max-width:640px){
-      body{padding:16px}
+      body{padding:12px}
       .brand{font-size:24px}
-      h1{font-size:34px}
-      .results-head{align-items:flex-start;gap:8px;flex-direction:column}
-      .main{align-items:flex-start}
+      h1{font-size:30px}
+      .results-head{flex-direction:column;align-items:flex-start;gap:6px}
       .cta{margin-left:0;width:100%;text-align:center}
     }
   </style>
 </head>
 <body>
 
-  <div class="app">
+<div class="app">
 
-    <div class="topbar">
-      <div class="logo">🍴</div>
-      <div class="brand">FitOrder</div>
-      <div class="mvp">MVP</div>
+  <div class="topbar">
+    <div class="logo">🍴</div>
+    <div class="brand">FitOrder</div>
+    <div class="mvp">MVP</div>
+  </div>
+
+  <div class="hero">
+    <h1>Pide comida sin salirte de tu dieta</h1>
+    <p>Encuentra opciones reales de restaurantes según las calorías que te quedan y tus objetivos de proteína.</p>
+  </div>
+
+  <div class="filters">
+
+    <div>
+      <div class="label">¿Qué te apetece?</div>
+
+      <div class="chips">
+        <div class="chip active" data-type="hamburguesa">🍔 Hamburguesa</div>
+        <div class="chip" data-type="burrito">🌯 Burrito</div>
+      </div>
+
+      <label class="checkbox">
+        <input type="checkbox" id="priorizar" checked />
+        Priorizar proteína
+      </label>
+
+      <div class="badges">
+        <div class="badge">Datos oficiales</div>
+        <div class="badge">Burger King</div>
+        <div class="badge">Taco Bell</div>
+      </div>
     </div>
 
-    <div class="hero">
-      <h1>Pide comida sin salirte de tu dieta</h1>
-      <p>
-        Encuentra opciones reales de restaurantes según las calorías que te quedan
-        y tus objetivos de proteína.
-      </p>
-    </div>
-
-    <div class="filters">
-
-      <div>
-        <div class="label">¿Qué te apetece?</div>
-
-        <div class="chips">
-          <div class="chip active">🍔 Hamburguesa</div>
-          <div class="chip">🌯 Burrito</div>
-          <div class="chip">🍕 Pizza</div>
-        </div>
-
-        <label class="checkbox">
-          <input type="checkbox" checked />
-          Priorizar proteína
-        </label>
-
-        <div class="badges">
-          <div class="badge">Datos oficiales</div>
-          <div class="badge">Burger King</div>
-          <div class="badge">Taco Bell</div>
-        </div>
+    <div>
+      <div class="kcal-head">
+        <span>¿Cuántas kcal te quedan?</span>
+        <span id="kcalValue">800 kcal</span>
       </div>
 
-      <div>
-        <div class="kcal-head">
-          <span>¿Cuántas kcal te quedan?</span>
-          <span>800 kcal</span>
-        </div>
+      <input type="range" id="kcalSlider" min="300" max="1500" step="50" value="800" />
 
-        <input type="range" min="300" max="1500" value="800" />
-
-        <div class="search">
-          <button>🔎 Buscar comida</button>
-        </div>
+      <div class="search">
+        <button onclick="buscar()">🔎 Buscar comida</button>
       </div>
-
-    </div>
-
-    <div class="results-head">
-      <h2>Resultados</h2>
-      <div class="target">Objetivo: ≤ 800 kcal</div>
-    </div>
-
-    <div class="card">
-
-      <div class="card-top">
-        <div class="tag">MEJOR OPCIÓN</div>
-        <div class="kcal">643 kcal</div>
-      </div>
-
-      <div class="main">
-        <div class="icon">🍔</div>
-
-        <div>
-          <div class="title">Whopper</div>
-          <div class="restaurant">Burger King</div>
-        </div>
-      </div>
-
-      <div class="macros">
-        <div>🔥 643 kcal</div>
-        <div>💪 30.4 g proteína</div>
-        <div>📉 48.9 g carbohidratos</div>
-        <div>🥑 36 g grasa</div>
-      </div>
-
-      <div class="bottom">
-        <div class="ok">Cabe dentro del objetivo</div>
-
-        <a class="cta" href="https://www.burgerking.es" target="_blank">
-          Ver en Burger King ↗
-        </a>
-      </div>
-
     </div>
 
   </div>
+
+  <div class="results-head">
+    <h2>Resultados</h2>
+    <div id="objetivoTxt">Objetivo: ≤ 800 kcal</div>
+  </div>
+
+  <div id="resultados" class="results"></div>
+
+</div>
+
+<script>
+  const platos = [
+    { restaurante:'Burger King', plato:'Whopper', kcal:643, proteina:30.4, carbs:48.9, grasa:36, tipo:'hamburguesa' },
+    { restaurante:'Burger King', plato:'Steakhouse', kcal:707, proteina:36.2, carbs:54.2, grasa:38.4, tipo:'hamburguesa' },
+    { restaurante:'Burger King', plato:'Long Chicken', kcal:585, proteina:22.0, carbs:46.0, grasa:35.0, tipo:'hamburguesa' },
+
+    { restaurante:'Taco Bell', plato:'Burrito Supreme Pollo Picante', kcal:349, proteina:29.6, carbs:35.7, grasa:9.6, tipo:'burrito' },
+    { restaurante:'Taco Bell', plato:'Crunchywrap Supreme Pollo Asado', kcal:505, proteina:49.8, carbs:33.9, grasa:16.1, tipo:'burrito' }
+  ];
+
+  let tipoActual = 'hamburguesa';
+
+  document.querySelectorAll('.chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+      tipoActual = chip.dataset.type;
+      buscar();
+    });
+  });
+
+  const slider = document.getElementById('kcalSlider');
+  const kcalValue = document.getElementById('kcalValue');
+  const objetivoTxt = document.getElementById('objetivoTxt');
+
+  slider.addEventListener('input', () => {
+    kcalValue.textContent = slider.value + ' kcal';
+    objetivoTxt.textContent = 'Objetivo: ≤ ' + slider.value + ' kcal';
+  });
+
+  function buscar(){
+    const kcal = parseInt(slider.value);
+    const priorizar = document.getElementById('priorizar').checked;
+
+    let resultados = platos.filter(p => p.tipo === tipoActual && p.kcal <= kcal);
+
+    resultados.sort((a,b) => priorizar ? b.proteina - a.proteina : a.kcal - b.kcal);
+
+    const cont = document.getElementById('resultados');
+    cont.innerHTML = '';
+
+    if(resultados.length === 0){
+      cont.innerHTML = '<div class="empty">No hay opciones dentro de tus calorías.</div>';
+      return;
+    }
+
+    const mejor = resultados[0];
+
+    cont.innerHTML += `
+      <div class="card">
+        <div class="tag">MEJOR OPCIÓN</div>
+
+        <div class="row">
+          <div>
+            <div class="title">${mejor.plato}</div>
+            <div class="restaurant">${mejor.restaurante}</div>
+          </div>
+
+          <div class="kcal">${mejor.kcal} kcal</div>
+        </div>
+
+        <div class="macros">
+          <div>🔥 ${mejor.kcal} kcal</div>
+          <div>💪 ${mejor.proteina} g proteína</div>
+          <div>📉 ${mejor.carbs} g carbohidratos</div>
+          <div>🥑 ${mejor.grasa} g grasa</div>
+        </div>
+
+        <div class="bottom">
+          <div class="ok">Cabe dentro del objetivo</div>
+          <a class="cta" href="https://www.burgerking.es" target="_blank">Ver en ${mejor.restaurante} ↗</a>
+        </div>
+      </div>
+    `;
+
+    resultados.slice(1).forEach(p => {
+      cont.innerHTML += `
+        <div class="card secondary">
+          <div class="row">
+            <div>
+              <div class="title" style="font-size:26px">${p.plato}</div>
+              <div class="restaurant" style="font-size:18px">${p.restaurante}</div>
+            </div>
+            <div class="kcal" style="font-size:24px">${p.kcal} kcal</div>
+          </div>
+
+          <div class="macros">
+            <div>💪 ${p.proteina} g proteína</div>
+            <div>📉 ${p.carbs} g carbohidratos</div>
+            <div>🥑 ${p.grasa} g grasa</div>
+          </div>
+        </div>
+      `;
+    });
+  }
+
+  buscar();
+</script>
 
 </body>
 </html>
