@@ -261,6 +261,11 @@
       font-weight:800;
     }
 
+    .left{
+      color:#d1fae5;
+      font-weight:800;
+    }
+
     .cta{
       margin-left:auto;
       border:1px solid #86efac;
@@ -278,6 +283,13 @@
       padding:18px;
       border-radius:16px;
       font-weight:800;
+      text-align:center;
+    }
+
+    .footer{
+      padding:0 26px 26px;
+      color:#94a3b8;
+      font-size:14px;
       text-align:center;
     }
 
@@ -319,6 +331,7 @@
       <div class="chips">
         <div class="chip active" data-type="hamburguesa">🍔 Hamburguesa</div>
         <div class="chip" data-type="burrito">🌯 Burrito</div>
+        <div class="chip" data-type="pizza">🍕 Pizza</div>
       </div>
 
       <label class="checkbox">
@@ -330,6 +343,7 @@
         <div class="badge">Datos oficiales</div>
         <div class="badge">Burger King</div>
         <div class="badge">Taco Bell</div>
+        <div class="badge">Domino's</div>
       </div>
     </div>
 
@@ -342,7 +356,7 @@
       <input type="range" id="kcalSlider" min="300" max="1500" step="50" value="800" />
 
       <div class="search">
-        <button onclick="buscar()">🔎 Buscar comida</button>
+        <button onclick="buscar()">🔎 Encontrar mi mejor opción</button>
       </div>
     </div>
 
@@ -355,105 +369,128 @@
 
   <div id="resultados" class="results"></div>
 
+  <div class="footer">
+    Datos obtenidos de las tablas nutricionales oficiales de Burger King, Taco Bell y Domino's Pizza.
+  </div>
+
 </div>
 
 <script>
-  const platos = [
-    { restaurante:'Burger King', plato:'Whopper', kcal:643, proteina:30.4, carbs:48.9, grasa:36, tipo:'hamburguesa' },
-    { restaurante:'Burger King', plato:'Steakhouse', kcal:707, proteina:36.2, carbs:54.2, grasa:38.4, tipo:'hamburguesa' },
-    { restaurante:'Burger King', plato:'Long Chicken', kcal:585, proteina:22.0, carbs:46.0, grasa:35.0, tipo:'hamburguesa' },
+const platos = [
 
-    { restaurante:'Taco Bell', plato:'Burrito Supreme Pollo Picante', kcal:349, proteina:29.6, carbs:35.7, grasa:9.6, tipo:'burrito' },
-    { restaurante:'Taco Bell', plato:'Crunchywrap Supreme Pollo Asado', kcal:505, proteina:49.8, carbs:33.9, grasa:16.1, tipo:'burrito' }
-  ];
+  // BURGER KING
+  { restaurante:'Burger King', plato:'Whopper', kcal:643, proteina:30.4, carbs:48.9, grasa:36, tipo:'hamburguesa' },
+  { restaurante:'Burger King', plato:'Steakhouse', kcal:707, proteina:36.2, carbs:54.2, grasa:38.4, tipo:'hamburguesa' },
+  { restaurante:'Burger King', plato:'Long Chicken', kcal:585, proteina:22.0, carbs:46.0, grasa:35.0, tipo:'hamburguesa' },
+  { restaurante:'Burger King', plato:'Brutal Bacon (1 carne)', kcal:689, proteina:36.8, carbs:44.0, grasa:39.6, tipo:'hamburguesa' },
+  { restaurante:'Burger King', plato:'CBK (1 filete)', kcal:787, proteina:29.6, carbs:62.7, grasa:45.2, tipo:'hamburguesa' },
 
-  let tipoActual = 'hamburguesa';
+  // TACO BELL
+  { restaurante:'Taco Bell', plato:'Burrito Supreme Pollo Picante', kcal:349, proteina:29.6, carbs:35.7, grasa:9.6, tipo:'burrito' },
+  { restaurante:'Taco Bell', plato:'Crunchywrap Supreme Pollo Asado', kcal:505, proteina:49.8, carbs:33.9, grasa:16.1, tipo:'burrito' },
 
-  document.querySelectorAll('.chip').forEach(chip => {
-    chip.addEventListener('click', () => {
-      document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
-      chip.classList.add('active');
-      tipoActual = chip.dataset.type;
-      buscar();
-    });
+  // DOMINO'S
+  { restaurante:'Domino\\'s', plato:'Campiña', kcal:170, proteina:7.9, carbs:19.0, grasa:6.8, tipo:'pizza' },
+  { restaurante:'Domino\\'s', plato:'Pollo a la Parrilla', kcal:181, proteina:10.0, carbs:23.9, grasa:5.1, tipo:'pizza' },
+  { restaurante:'Domino\\'s', plato:'Margarita', kcal:212, proteina:9.4, carbs:29.4, grasa:6.2, tipo:'pizza' }
+
+];
+
+let tipoActual = 'hamburguesa';
+
+document.querySelectorAll('.chip').forEach(chip => {
+  chip.addEventListener('click', () => {
+    document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+    chip.classList.add('active');
+    tipoActual = chip.dataset.type;
+    buscar();
   });
+});
 
-  const slider = document.getElementById('kcalSlider');
-  const kcalValue = document.getElementById('kcalValue');
-  const objetivoTxt = document.getElementById('objetivoTxt');
+const slider = document.getElementById('kcalSlider');
+const kcalValue = document.getElementById('kcalValue');
+const objetivoTxt = document.getElementById('objetivoTxt');
 
-  slider.addEventListener('input', () => {
-    kcalValue.textContent = slider.value + ' kcal';
-    objetivoTxt.textContent = 'Objetivo: ≤ ' + slider.value + ' kcal';
-  });
+slider.addEventListener('input', () => {
+  kcalValue.textContent = slider.value + ' kcal';
+  objetivoTxt.textContent = 'Objetivo: ≤ ' + slider.value + ' kcal';
+});
 
-  function buscar(){
-    const kcal = parseInt(slider.value);
-    const priorizar = document.getElementById('priorizar').checked;
+function buscar(){
 
-    let resultados = platos.filter(p => p.tipo === tipoActual && p.kcal <= kcal);
+  const kcal = parseInt(slider.value);
+  const priorizar = document.getElementById('priorizar').checked;
 
-    resultados.sort((a,b) => priorizar ? b.proteina - a.proteina : a.kcal - b.kcal);
+  let resultados = platos.filter(p => p.tipo === tipoActual && p.kcal <= kcal);
 
-    const cont = document.getElementById('resultados');
-    cont.innerHTML = '';
+  resultados.sort((a,b) => priorizar ? b.proteina - a.proteina : a.kcal - b.kcal);
 
-    if(resultados.length === 0){
-      cont.innerHTML = '<div class="empty">No hay opciones dentro de tus calorías.</div>';
-      return;
-    }
+  const cont = document.getElementById('resultados');
+  cont.innerHTML = '';
 
-    const mejor = resultados[0];
+  if(resultados.length === 0){
+    cont.innerHTML = '<div class="empty">No hay opciones dentro de tus calorías.</div>';
+    return;
+  }
 
+  const mejor = resultados[0];
+  const restantes = kcal - mejor.kcal;
+
+  cont.innerHTML += `
+    <div class="card">
+
+      <div class="tag">MEJOR OPCIÓN</div>
+
+      <div class="row">
+        <div>
+          <div class="title">${mejor.plato}</div>
+          <div class="restaurant">${mejor.restaurante}</div>
+        </div>
+
+        <div class="kcal">${mejor.kcal} kcal</div>
+      </div>
+
+      <div class="macros">
+        <div>🔥 ${mejor.kcal} kcal</div>
+        <div>💪 ${mejor.proteina} g proteína</div>
+        <div>📉 ${mejor.carbs} g carbohidratos</div>
+        <div>🥑 ${mejor.grasa} g grasa</div>
+      </div>
+
+      <div class="bottom">
+        <div class="ok">Cabe dentro del objetivo</div>
+        <div class="left">📉 Te sobran ${restantes} kcal</div>
+        <a class="cta" href="#">Ver restaurante ↗</a>
+      </div>
+
+    </div>
+  `;
+
+  resultados.slice(1,5).forEach(p => {
     cont.innerHTML += `
-      <div class="card">
-        <div class="tag">MEJOR OPCIÓN</div>
+      <div class="card secondary">
 
         <div class="row">
           <div>
-            <div class="title">${mejor.plato}</div>
-            <div class="restaurant">${mejor.restaurante}</div>
+            <div class="title" style="font-size:26px">${p.plato}</div>
+            <div class="restaurant" style="font-size:18px">${p.restaurante}</div>
           </div>
 
-          <div class="kcal">${mejor.kcal} kcal</div>
+          <div class="kcal" style="font-size:24px">${p.kcal} kcal</div>
         </div>
 
         <div class="macros">
-          <div>🔥 ${mejor.kcal} kcal</div>
-          <div>💪 ${mejor.proteina} g proteína</div>
-          <div>📉 ${mejor.carbs} g carbohidratos</div>
-          <div>🥑 ${mejor.grasa} g grasa</div>
+          <div>💪 ${p.proteina} g proteína</div>
+          <div>📉 ${p.carbs} g carbohidratos</div>
+          <div>🥑 ${p.grasa} g grasa</div>
         </div>
 
-        <div class="bottom">
-          <div class="ok">Cabe dentro del objetivo</div>
-          <a class="cta" href="https://www.burgerking.es" target="_blank">Ver en ${mejor.restaurante} ↗</a>
-        </div>
       </div>
     `;
+  });
+}
 
-    resultados.slice(1).forEach(p => {
-      cont.innerHTML += `
-        <div class="card secondary">
-          <div class="row">
-            <div>
-              <div class="title" style="font-size:26px">${p.plato}</div>
-              <div class="restaurant" style="font-size:18px">${p.restaurante}</div>
-            </div>
-            <div class="kcal" style="font-size:24px">${p.kcal} kcal</div>
-          </div>
-
-          <div class="macros">
-            <div>💪 ${p.proteina} g proteína</div>
-            <div>📉 ${p.carbs} g carbohidratos</div>
-            <div>🥑 ${p.grasa} g grasa</div>
-          </div>
-        </div>
-      `;
-    });
-  }
-
-  buscar();
+buscar();
 </script>
 
 </body>
